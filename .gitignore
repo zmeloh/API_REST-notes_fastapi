@@ -1,2 +1,39 @@
-venv/
-my_notes.db
+import os
+import sqlite3
+from flask import Flask, request, jsonify
+
+# Set up the database connection
+def get_db_connection():
+    conn = sqlite3.connect('my_notes.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
+# Set up the Flask app
+app = Flask(__name__)
+
+# Define a route to get all notes
+@app.route('/notes', methods=['GET'])
+def get_notes():
+    conn = get_db_connection()
+    notes = conn.execute('SELECT * FROM notes').fetchall()
+    conn.close()
+    return jsonify(notes)
+
+# Define a route to add a new note
+@app.route('/notes', methods=['POST'])
+def add_note():
+    data = request.get_json()
+    conn = get_db_connection()
+    conn.execute('INSERT INTO notes (title, content) VALUES (?, ?)', (data['title'], data['content']))
+    conn.commit()
+    conn.close()
+    return jsonify({'message': 'Note added successfully'})
+
+# Define a route to update a note
+@app.route('/notes/<int:note_id>', methods=['PUT'])
+def update_note(note_id):
+    data = request.get_json()
+    conn = get_db_connection()
+    conn.execute('UPDATE notes SET title = ?, content = ? WHERE id = ?', (data['title'], data['content'], note_id))
+    conn.commit()
+
