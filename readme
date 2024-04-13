@@ -1,0 +1,11 @@
+pour creer une executable d une api créer avec fastapi 
+
+1 on installe pyinstaller
+pip install pyinstaller
+2 on navige vers la path racine main.py et on execute 
+pyinstaller --onefile --hidden-import=tortoise.backends.sqlite main.py
+
+pour lancer l api avec cet executable on execute la conmmande depuis la racide de cet executable
+main.exe runserver localhost:8000 --noreload
+
+NB: avant de faire l executabble du project django de passer le debug a vrai sinon ca fonctionnera pas

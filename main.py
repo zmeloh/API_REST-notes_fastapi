@@ -25,8 +25,8 @@ async def shutdown_event():
 # Importer et utiliser les routeurs pour les utilisateurs et les notes
 from routes import user, note
 
-app.include_router(user.router, prefix="/api")
 app.include_router(note.router, prefix="/api")
+app.include_router(user.router, prefix="/api")
 
 if __name__ == "__main__":
     import uvicorn
